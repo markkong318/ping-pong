@@ -13,12 +13,14 @@ import {Size} from "../framework/size";
 import Bottle from "../framework/bottle";
 import Event from "../framework/event";
 import {Engine} from "./util/engine";
+import {Ai} from "./util/ai";
 
 export class GameApplication extends Application {
   private _gameModel: GameModel;
   private _gameController: GameController;
   private _gameView: GameView;
   private _engine: Engine;
+  private _ai: Ai;
 
   constructor(options?) {
     super(options);
@@ -27,19 +29,7 @@ export class GameApplication extends Application {
 
   public preload(): void {
     this.loader
-      // .add(FRUIT_NAME_1, veggies_1)
-      // .add(FRUIT_NAME_2, veggies_4)
-      // .add(FRUIT_NAME_3, veggies_11)
-      // .add(FRUIT_NAME_4, veggies_13)
-      // .add(FRUIT_NAME_5, veggies_17)
       .load((loader, resources) => {
-
-        // Bottle.set(`fruit_texture_${FRUIT_ID_1}`, PIXI.Texture.from(FRUIT_NAME_1));
-        // Bottle.set(`fruit_texture_${FRUIT_ID_2}`, PIXI.Texture.from(FRUIT_NAME_2));
-        // Bottle.set(`fruit_texture_${FRUIT_ID_3}`, PIXI.Texture.from(FRUIT_NAME_3));
-        // Bottle.set(`fruit_texture_${FRUIT_ID_4}`, PIXI.Texture.from(FRUIT_NAME_4));
-        // Bottle.set(`fruit_texture_${FRUIT_ID_5}`, PIXI.Texture.from(FRUIT_NAME_5));
-
         this.onAssetsLoaded();
       });
   }
@@ -59,6 +49,9 @@ export class GameApplication extends Application {
     this._gameView.init();
 
     this._engine = new Engine();
+    this._engine.start();
+
+    this._ai = new Ai();
 
     this.stage.addChild(this._gameView);
 

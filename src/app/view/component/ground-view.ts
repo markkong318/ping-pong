@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import {View} from "../../../framework/view";
 import {GameModel} from "../../model/game-model";
 import {
-  EVENT_PLAYER_MOVE,
+  EVENT_PLAYER1_MOVE, EVENT_PLAYER1_OUT, EVENT_PLAYER2_MOVE,
 } from "../../util/env";
 import Bottle from '../../../framework/bottle';
 import Event from "../../../framework/event";
@@ -18,13 +18,10 @@ export class GroundView extends View {
   private _player2: PIXI.Sprite;
   private _ball: PIXI.Sprite;
 
-  // private _dx: number = 1 / Math.pow(2, 0.5);
-  // private _dy: number = 1 / Math.pow(2, 0.5);
+  private _active: boolean;
 
   constructor() {
     super();
-
-
   }
 
   public init() {
@@ -76,14 +73,25 @@ export class GroundView extends View {
     this._ball.y = this.size.height / 2;
     this.addChild(this._ball);
 
-    Event.on(EVENT_PLAYER_MOVE, (distance) => {
-      this.playerMove(distance);
+    this._active = true;
+
+    Event.on(EVENT_PLAYER1_MOVE, (distance) => {
+      if (!this._active) {
+        return;
+      }
+      this.player1Move(distance);
     });
 
-    // PIXI.Ticker.shared.add((delta) => {
-    //   this._ball.x += this._dx;
-    //   this._ball.y += this._dy;
-    // });
+    Event.on(EVENT_PLAYER2_MOVE, (distance) => {
+      if (!this._active) {
+        return;
+      }
+      this.player2Move(distance);
+    });
+
+    Event.on(EVENT_PLAYER1_OUT, () => {
+      this._active = false;
+    });
 
     Bottle.set('ballSprite', this._ball);
     Bottle.set('player1Sprite', this._player1);
@@ -91,7 +99,7 @@ export class GroundView extends View {
     Bottle.set('size', this.size);
   }
 
-  public playerMove(distance) {
+  public player1Move(distance) {
     this._player1.y += distance;
 
     if (this._player1.y < this._player1.height / 2) {
@@ -103,7 +111,15 @@ export class GroundView extends View {
     }
   }
 
-  public ballMove() {
+  public player2Move(distance) {
+    this._player2.y += distance;
 
+    if (this._player2.y < this._player2.height / 2) {
+      this._player2.y = this._player2.height / 2;
+    }
+
+    if (this._player2.y > this.size.height - this._player2.height / 2) {
+      this._player2.y = this.size.height - this._player2.height / 2;
+    }
   }
 }

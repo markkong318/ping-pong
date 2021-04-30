@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import {View} from "../../../framework/view";
 import {GameModel} from "../../model/game-model";
 import {
-  EVENT_PLAYER_MOVE,
+  EVENT_PLAYER1_MOVE,
 } from "../../util/env";
 import Bottle from '../../../framework/bottle';
 import Event from "../../../framework/event";
@@ -47,6 +47,6 @@ export class TouchView extends View {
 
     this._y = evt.data.global.y;
 
-    Event.emit(EVENT_PLAYER_MOVE, move);
+    Event.emit(EVENT_PLAYER1_MOVE, move);
   }
 }
