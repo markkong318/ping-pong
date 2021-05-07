@@ -3,6 +3,7 @@ import {GameModel} from "../model/game-model";
 import Bottle from "../../framework/bottle";
 import Event from "../../framework/event";
 import {
+  END_SCORE,
   EVENT_PLAYER1_OUT,
   EVENT_PLAYER2_OUT,
   EVENT_RENDER_GAME_OVER,
@@ -47,8 +48,8 @@ export class GameController extends Controller {
   }
 
   updateGameOver() {
-    if (this._gameModel.player1Score < 9 &&
-      this._gameModel.player2Score < 9) {
+    if (this._gameModel.player1Score < END_SCORE &&
+      this._gameModel.player2Score < END_SCORE) {
       setTimeout(() => {
         Event.emit(EVENT_START_GAME);
       }, 1000);

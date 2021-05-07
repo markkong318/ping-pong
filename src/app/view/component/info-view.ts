@@ -4,7 +4,9 @@ import gsap from 'gsap';
 import {View} from "../../../framework/view";
 import {GameModel} from "../../model/game-model";
 import {
-  EVENT_PLAYER1_MOVE, EVENT_PLAYER1_OUT, EVENT_PLAYER2_MOVE, EVENT_RENDER_GAME_OVER, EVENT_RENDER_SCORE,
+  END_SCORE,
+  EVENT_RENDER_GAME_OVER,
+  EVENT_RENDER_SCORE,
 } from "../../util/env";
 import Bottle from '../../../framework/bottle';
 import Event from "../../../framework/event";
@@ -16,6 +18,8 @@ export class InfoView extends View {
   private _graphics: PIXI.Graphics;
   private _player1Score: PIXI.Text;
   private _player2Score: PIXI.Text;
+
+  private _timeline: gsap.core.Timeline;
 
   constructor() {
     super();
@@ -45,6 +49,8 @@ export class InfoView extends View {
     Event.on(EVENT_RENDER_GAME_OVER, () => {
       this.renderGameOver();
     });
+
+    this._timeline = gsap.timeline();
   }
 
   renderScore() {
@@ -53,6 +59,36 @@ export class InfoView extends View {
   }
 
   renderGameOver() {
+    let target;
 
+    if (this._gameModel.player1Score === END_SCORE) {
+      target = this._player1Score;
+    } else {
+      target = this._player2Score;
+    }
+
+    this._timeline
+      .to(target,
+      {
+        duration: 0.5,
+        onStart: function() {
+          this.targets()[0].alpha = 1;
+        },
+        onComplete: function() {
+          this.targets()[0].alpha = 0;
+        }
+      })
+      .to(target,
+        {
+          duration: 0.5,
+          onStart: function() {
+            this.targets()[0].alpha = 0;
+          },
+          onComplete: function() {
+            this.targets()[0].alpha = 1;
+          }
+        })
+
+    this._timeline.repeat(3);
   }
 }
