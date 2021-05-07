@@ -4,6 +4,7 @@ import {Size} from "../../framework/size";
 import {GroundView} from "./component/ground-view";
 import {Point} from "pixi.js";
 import {TouchView} from "./component/touch-view";
+import {InfoView} from "./component/info-view";
 
 export class GameView extends View {
   private _gameModel: GameModel;
@@ -32,5 +33,11 @@ export class GameView extends View {
     touchView.size = new Size(this.size.width, this.size.height / 2);
     touchView.init();
     this.addChild(touchView);
+
+    const infoView = new InfoView();
+    infoView.position = new Point(0, 0);
+    infoView.size = new Size(this.size.width, this.size.height);
+    infoView.init();
+    this.addChild(infoView);
   }
 }

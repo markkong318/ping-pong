@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js';
 
 export default new PIXI.TextStyle({
-  fontFamily: 'press-start-2p-v9-latin',
-  fontSize: 18,
+  fontFamily: 'pong-score',
+  fontSize: 100,
   fontStyle: '',
   // fontWeight: 'bold',
   fill: ['#ffffff'], // gradient

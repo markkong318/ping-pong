@@ -4,7 +4,10 @@ import gsap from 'gsap';
 import {View} from "../../../framework/view";
 import {GameModel} from "../../model/game-model";
 import {
-  EVENT_PLAYER1_MOVE, EVENT_PLAYER1_OUT, EVENT_PLAYER2_MOVE,
+  EVENT_PLAYER1_MOVE,
+  EVENT_PLAYER1_OUT,
+  EVENT_PLAYER2_MOVE,
+  EVENT_START_GAME,
 } from "../../util/env";
 import Bottle from '../../../framework/bottle';
 import Event from "../../../framework/event";
@@ -47,33 +50,18 @@ export class GroundView extends View {
     this.addChild(this._graphics);
 
     this._player1 = PIXI.Sprite.from(PIXI.Texture.WHITE);
-    this._player1.width = 8;
-    this._player1.height = 40;
-    this._player1.anchor.x = 0.5;
-    this._player1.anchor.y = 0.5;
-    this._player1.x = 20;
-    this._player1.y = this._player1.height / 2;
     this.addChild(this._player1);
 
     this._player2 = PIXI.Sprite.from(PIXI.Texture.WHITE);
-    this._player2.width = 8;
-    this._player2.height = 40;
-    this._player2.anchor.x = 0.5;
-    this._player2.anchor.y = 0.5;
-    this._player2.x = this.size.width - 20;
-    this._player2.y = this._player2.height / 2;
     this.addChild(this._player2);
 
     this._ball = PIXI.Sprite.from(PIXI.Texture.WHITE);
-    this._ball.width = 6;
-    this._ball.height = 6;
-    this._ball.anchor.x = 0.5;
-    this._ball.anchor.y = 0.5;
-    this._ball.x = this.size.width / 2;
-    this._ball.y = this.size.height / 2;
     this.addChild(this._ball);
 
-    this._active = true;
+    this.initPlayer();
+    this.initBall();
+
+    this._active = false;
 
     Event.on(EVENT_PLAYER1_MOVE, (distance) => {
       if (!this._active) {
@@ -93,10 +81,42 @@ export class GroundView extends View {
       this._active = false;
     });
 
+    Event.on(EVENT_START_GAME, () => {
+      this.initPlayer();
+      this.initBall();
+      this._active = true;
+    });
+
     Bottle.set('ballSprite', this._ball);
     Bottle.set('player1Sprite', this._player1);
     Bottle.set('player2Sprite', this._player2);
     Bottle.set('size', this.size);
+  }
+
+
+  public initPlayer() {
+    this._player1.width = 8;
+    this._player1.height = 40;
+    this._player1.anchor.x = 0.5;
+    this._player1.anchor.y = 0.5;
+    this._player1.x = 20;
+    this._player1.y = this._player1.height / 2;
+
+    this._player2.width = 8;
+    this._player2.height = 40;
+    this._player2.anchor.x = 0.5;
+    this._player2.anchor.y = 0.5;
+    this._player2.x = this.size.width - 20;
+    this._player2.y = this._player2.height / 2;
+  }
+
+  public initBall() {
+    this._ball.width = 6;
+    this._ball.height = 6;
+    this._ball.anchor.x = 0.5;
+    this._ball.anchor.y = 0.5;
+    this._ball.x = this.size.width / 2;
+    this._ball.y = this.size.height / 2;
   }
 
   public player1Move(distance) {

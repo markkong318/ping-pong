@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import {DotFilter} from '@pixi/filter-dot';
 import gsap from 'gsap';
 
 import {View} from "../../../framework/view";
@@ -31,6 +32,8 @@ export class TouchView extends View {
     this._graphics
       .on('pointerdown', this.onPointerDown)
       .on('pointermove', this.onPointerMove);
+
+    this._graphics.filters = [new DotFilter()];
   }
 
   public onPointerDown(evt: InteractionEvent) {
@@ -44,7 +47,6 @@ export class TouchView extends View {
     }
 
     const move = evt.data.global.y - this._y;
-
     this._y = evt.data.global.y;
 
     Event.emit(EVENT_PLAYER1_MOVE, move);

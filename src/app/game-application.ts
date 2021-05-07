@@ -14,6 +14,7 @@ import Bottle from "../framework/bottle";
 import Event from "../framework/event";
 import {Engine} from "./util/engine";
 import {Ai} from "./util/ai";
+import {EVENT_START_GAME} from "./util/env";
 
 export class GameApplication extends Application {
   private _gameModel: GameModel;
@@ -49,13 +50,13 @@ export class GameApplication extends Application {
     this._gameView.init();
 
     this._engine = new Engine();
-    this._engine.start();
-
     this._ai = new Ai();
 
     this.stage.addChild(this._gameView);
 
     this.resizeView();
+
+    Event.emit(EVENT_START_GAME);
   }
 
   public resizeView(): void {

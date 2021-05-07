@@ -5,7 +5,7 @@ import PixiPlugin from "gsap/PixiPlugin";
 import {GameApplication} from "./app/game-application";
 import * as PIXI from 'pixi.js';
 
-var font = new FontFaceObserver('press-start-2p-v9-latin')
+var font = new FontFaceObserver('pong-score')
 font.load()
   .then(() => {
     window.PIXI = PIXI;

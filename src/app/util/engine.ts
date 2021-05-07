@@ -2,7 +2,14 @@ import * as PIXI from 'pixi.js';
 import {Size} from '../../framework/size';
 import Bottle from '../../framework/bottle';
 import Event from '../../framework/event';
-import {EVENT_PLAYER1_OUT, EVENT_PLAYER2_OUT, PLAYER1_ID, PLAYER2_ID} from "./env";
+import {
+  EVENT_PLAYER1_OUT,
+  EVENT_PLAYER2_OUT,
+  EVENT_START_GAME,
+  INIT_SPEED,
+  PLAYER1_ID,
+  PLAYER2_ID
+} from "./env";
 
 export class Engine {
   private _ball: PIXI.Sprite;
@@ -10,12 +17,12 @@ export class Engine {
   private _player2:  PIXI.Sprite;
   private _size: Size;
 
-  private _dx: number = 1 / Math.pow(2, 0.5);
-  private _dy: number = 1 / Math.pow(2, 0.5);
+  private _dx: number;
+  private _dy: number;
 
   private _ticker: PIXI.Ticker;
 
-  private _speed: number = 15;
+  private _speed: number = INIT_SPEED;
 
   constructor() {
     this._ball = Bottle.get('ballSprite');
@@ -25,7 +32,6 @@ export class Engine {
 
     this._ticker = PIXI.Ticker.shared;
     this._ticker.autoStart = false;
-
 
     this._ticker.add((delta) => {
       for (let i = 0; i < 3; i++) {
@@ -54,10 +60,16 @@ export class Engine {
         }
       }
     });
+
+    Event.on(EVENT_START_GAME, () => {
+      this.start();
+    });
   }
 
   start() {
     this._ticker.start();
+    this._dx = 1 / Math.pow(2, 0.5);
+    this._dy = 1 / Math.pow(2, 0.5);
   }
 
   stop() {
