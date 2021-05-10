@@ -87,7 +87,7 @@ export class InfoView extends View {
           onComplete: function() {
             this.targets()[0].alpha = 1;
           }
-        })
+        });
 
     this._timeline.repeat(3);
   }

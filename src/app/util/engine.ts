@@ -6,6 +6,7 @@ import {
   EVENT_PLAYER1_OUT,
   EVENT_PLAYER2_OUT,
   EVENT_START_GAME,
+  INIT_SLOPE_ID,
   INIT_SPEED,
   PLAYER1_ID,
   PLAYER2_ID, SPEED_RATE
@@ -25,6 +26,16 @@ export class Engine {
   private _ticker: PIXI.Ticker;
 
   private _speed: number = INIT_SPEED;
+
+  private _slopes = [
+    0.2679,
+    0.5774,
+    1,
+    1.7321,
+    3.7321,
+  ];
+
+  private _slopeIdx = 2;
 
   constructor() {
     this._ball = Bottle.get('ballSprite');
@@ -49,15 +60,17 @@ export class Engine {
         }
 
         if (this.isCollided(this._player1)) {
-          this._dx = -this._dx;
-          this._speed += SPEED_RATE;
-          this._ball.x = this._player1.x + this._player1.width / 2 + this._ball.width / 2;
+          this.updateDirection();
+          this.updateSpeed();
+          this.updateSlope(this._player1);
+          this.updatePositionPatch(this._player1);
         }
 
         if (this.isCollided(this._player2)) {
-          this._dx = -this._dx;
-          this._speed += SPEED_RATE;
-          this._ball.x = this._player2.x - this._player1.width / 2 - this._ball.width / 2;
+          this.updateDirection();
+          this.updateSpeed();
+          this.updateSlope(this._player2);
+          this.updatePositionPatch(this._player2);
         }
 
         if (this.isOut()) {
@@ -73,14 +86,15 @@ export class Engine {
   }
 
   start() {
-    if (this._lastWin === PLAYER1_ID) {
-      this._dx = 1 / Math.pow(2, 0.5);
-      this._dy = 1 / Math.pow(2, 0.5);
-    } else {
-      this._dx = - 1 / Math.pow(2, 0.5);
-      this._dy = 1 / Math.pow(2, 0.5);
+    this._dx = 1 / Math.pow(1 + this._slopes[this._slopeIdx], 0.5);
+    this._dy = this._slopes[this._slopeIdx] / Math.pow(1 + this._slopes[this._slopeIdx], 0.5);
+
+    if (this._lastWin === PLAYER2_ID) {
+      this._dx = - this._dx;
     }
+
     this._speed = INIT_SPEED;
+    this._slopeIdx = INIT_SLOPE_ID;
     this._ticker.start();
   }
 
@@ -138,5 +152,44 @@ export class Engine {
     }
 
     return false;
+  }
+
+  updateDirection() {
+    this._dx = -this._dx;
+  }
+
+  updateSpeed() {
+    this._speed += SPEED_RATE;
+  }
+
+  updateSlope(player: PIXI.Sprite) {
+    if (this._ball.y < player.y - player.height / 6) {
+      if (this._dy > 0) {
+        this._slopeIdx = --this._slopeIdx < 0 ? 0 : this._slopeIdx;
+      } else {
+        this._slopeIdx = ++this._slopeIdx > this._slopes.length - 1 ? this._slopes.length - 1 : this._slopeIdx;
+      }
+    }
+
+    if (this._ball.y > player.y + player.height / 6) {
+      if (this._dy > 0) {
+        this._slopeIdx = ++this._slopeIdx > this._slopes.length - 1 ? this._slopes.length - 1 : this._slopeIdx;
+      } else {
+        this._slopeIdx = --this._slopeIdx < 0 ? 0 : this._slopeIdx;
+      }
+    }
+
+    this._dx = 1 / Math.pow(1 + this._slopes[this._slopeIdx], 0.5) * Math.sign(this._dx);
+    this._dy = this._slopes[this._slopeIdx] / Math.pow(1 + this._slopes[this._slopeIdx], 0.5) * Math.sign(this._dy);
+  }
+
+  updatePositionPatch(player: PIXI.Sprite) {
+    if (player === this._player1) {
+      this._ball.x = this._player1.x + this._player1.width / 2 + this._ball.width / 2;
+    }
+
+    if (player === this._player2) {
+      this._ball.x = this._player2.x - this._player1.width / 2 - this._ball.width / 2;
+    }
   }
 }
