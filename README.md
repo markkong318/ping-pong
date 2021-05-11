@@ -20,7 +20,7 @@ npm run start
 ```
 go to [http://localhost:1234](http://localhost:1234) in your browser. Done.
 
-DEMO: [https://markkong318.github.io/fruit-park/](https://markkong318.github.io/fruit-park/)
+DEMO: [https://markkong318.github.io/ping-pong/](https://markkong318.github.io/ping-pong/)
 
 ### npm scripts
 
