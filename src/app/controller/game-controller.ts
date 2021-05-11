@@ -4,7 +4,7 @@ import Bottle from "../../framework/bottle";
 import Event from "../../framework/event";
 import {
   END_SCORE,
-  EVENT_PLAYER1_OUT,
+  EVENT_PLAYER1_OUT, EVENT_PLAYER1_TOUCH,
   EVENT_PLAYER2_OUT,
   EVENT_RENDER_GAME_OVER,
   EVENT_RENDER_SCORE,
@@ -21,6 +21,10 @@ export class GameController extends Controller {
 
     this._gameModel = Bottle.get('gameModel');
 
+    Event.on(EVENT_PLAYER1_TOUCH, () => {
+      this.tryStart();
+    });
+
     Event.on(EVENT_PLAYER1_OUT, () => {
       this.updateScore(PLAYER2_ID, 1);
       this.updateGameOver();
@@ -30,6 +34,15 @@ export class GameController extends Controller {
       this.updateScore(PLAYER1_ID, 1);
       this.updateGameOver();
     });
+  }
+
+  tryStart() {
+    if (this._gameModel.isStart) {
+      return;
+    }
+
+    this._gameModel.isStart = true;
+    Event.emit(EVENT_START_GAME);
   }
 
   updateScore(playerId, value) {
@@ -53,6 +66,7 @@ export class GameController extends Controller {
       setTimeout(() => {
         Event.emit(EVENT_START_GAME);
       }, 1000);
+      return;
     }
 
     Event.emit(EVENT_RENDER_GAME_OVER);

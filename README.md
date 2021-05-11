@@ -1,4 +1,4 @@
-# Fruit Park
+# Ping Pong
 
 Game which is forked from `parcel-pixijs-quickstarter` and apply MVC
 
@@ -7,10 +7,10 @@ Game which is forked from `parcel-pixijs-quickstarter` and apply MVC
 
 ```bash
 # clone the repo.
-git clone https://github.com/markkong318/fruit-park.git
+git clone https://github.com/markkong318/ping-pong.git
 
 # go to the repo
-cd fruit-park
+cd ping-pong
 
 # install the dependencies via npm
 npm install
@@ -32,3 +32,4 @@ DEMO: [https://markkong318.github.io/fruit-park/](https://markkong318.github.io/
 
 # Asset
 [froots-and-veggies-culinary-pixels](https://zrghr.itch.io/froots-and-veggies-culinary-pixels)
+[Pong Score](https://fontstruct.com/fontstructions/show/1158273)

@@ -1,10 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-import veggies_1 from '../assets/images/Froots N Veggies_1.png';
-import veggies_4 from '../assets/images/Froots N Veggies_4.png';
-import veggies_11 from '../assets/images/Froots N Veggies_11.png';
-import veggies_13 from '../assets/images/Froots N Veggies_13.png';
-import veggies_17 from '../assets/images/Froots N Veggies_17.png';
 import {GameView} from "./view/game-view";
 import {GameModel} from "./model/game-model";
 import {GameController} from "./controller/game-controller";
@@ -50,22 +45,28 @@ export class GameApplication extends Application {
     this._gameView.init();
 
     this._engine = new Engine();
+    Bottle.set('engine', this._engine);
+
     this._ai = new Ai();
+    Bottle.set('ai', this._ai);
 
     this.stage.addChild(this._gameView);
 
     this.resizeView();
-
-    Event.emit(EVENT_START_GAME);
   }
 
   public resizeView(): void {
-    const scale = Math.min(this.renderer.width / this._gameView.size.width, this.renderer.height / this._gameView.size.height);
+    if (this._gameView.size.width > this._gameView.size.height) {
+      const scale = Math.min(this.renderer.width / this._gameView.size.width, this.renderer.height / this._gameView.size.height);
 
-    this._gameView.scale.x = scale;
-    this._gameView.scale.y = scale;
+      this._gameView.scale.x = scale;
+      this._gameView.scale.y = scale;
 
-    this._gameView.x = (this.renderer.width - this._gameView.size.width * scale) / 2;
-    this._gameView.y = (this.renderer.height - this._gameView.size.height * scale) / 2;
+      this._gameView.x = (this.renderer.width - this._gameView.size.width * scale) / 2;
+      this._gameView.y = (this.renderer.height - this._gameView.size.height * scale) / 2;
+    } else {
+      this._gameView.width = this.renderer.width;
+      this._gameView.height = this.renderer.height;
+    }
   }
 }

@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import {View} from "../../../framework/view";
 import {GameModel} from "../../model/game-model";
 import {
-  EVENT_PLAYER1_MOVE,
+  EVENT_PLAYER1_MOVE, EVENT_PLAYER1_TOUCH,
 } from "../../util/env";
 import Bottle from '../../../framework/bottle';
 import Event from "../../../framework/event";
@@ -37,6 +37,7 @@ export class TouchView extends View {
   }
 
   public onPointerDown(evt: InteractionEvent) {
+    Event.emit(EVENT_PLAYER1_TOUCH);
     this._y = null;
   }
 

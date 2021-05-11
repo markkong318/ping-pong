@@ -86,6 +86,9 @@ export class Engine {
   }
 
   start() {
+    this._speed = INIT_SPEED;
+    this._slopeIdx = INIT_SLOPE_ID;
+
     this._dx = 1 / Math.pow(1 + this._slopes[this._slopeIdx], 0.5);
     this._dy = this._slopes[this._slopeIdx] / Math.pow(1 + this._slopes[this._slopeIdx], 0.5);
 
@@ -93,8 +96,6 @@ export class Engine {
       this._dx = - this._dx;
     }
 
-    this._speed = INIT_SPEED;
-    this._slopeIdx = INIT_SLOPE_ID;
     this._ticker.start();
   }
 
@@ -191,5 +192,13 @@ export class Engine {
     if (player === this._player2) {
       this._ball.x = this._player2.x - this._player1.width / 2 - this._ball.width / 2;
     }
+  }
+
+  getDx() {
+    return this._dx;
+  }
+
+  getDy() {
+    return this._dy;
   }
 }

@@ -4,10 +4,12 @@ export const PLAYER2_ID = '2';
 
 export const INIT_SPEED = 3;
 export const INIT_SLOPE_ID = 2;
-export const SPEED_RATE = 0.1;
-export const END_SCORE = 1;
-export const AI_SAMPLE_RATE = 10;
+export const SPEED_RATE = 0.2;
+export const END_SCORE = 9;
+export const AI_ACTIVE_SAMPLE_RATE = 5;
+export const AI_SLEEP_SAMPLE_RATE = 60;
 
+export const EVENT_PLAYER1_TOUCH = 'event_player1_touch';
 export const EVENT_PLAYER1_MOVE = 'event_player1_move';
 export const EVENT_PLAYER2_MOVE = 'event_player2_move';
 export const EVENT_PLAYER1_OUT = 'event_player1_out';
