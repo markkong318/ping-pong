@@ -50,6 +50,6 @@ export class TouchView extends View {
     const move = evt.data.global.y - this._y;
     this._y = evt.data.global.y;
 
-    Event.emit(EVENT_PLAYER1_MOVE, move);
+    Event.emit(EVENT_PLAYER1_MOVE, move * 1.5);
   }
 }
